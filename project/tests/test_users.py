@@ -1,4 +1,5 @@
 import json
+
 from project.api.models import User
 
 
@@ -8,7 +9,7 @@ class TestUsersPost:
         resp = client.post(
             "/users",
             data=json.dumps(
-                {"username": "daguito81", "email": "dagoromer85@gmail.com",}
+                {"username": "daguito81", "email": "dagoromer85@gmail.com"}
             ),
             content_type="application/json",
         )
@@ -40,12 +41,12 @@ class TestUsersPost:
         client = test_app.test_client()
         client.post(
             "/users",
-            data=json.dumps({"username": "dago", "email": "dagovago@gmail.com",}),
+            data=json.dumps({"username": "dago", "email": "dagovago@gmail.com"}),
             content_type="application/json",
         )
         resp = client.post(
             "/users",
-            data=json.dumps({"username": "dago", "email": "dagovago@gmail.com",}),
+            data=json.dumps({"username": "dago", "email": "dagovago@gmail.com"}),
             content_type="application/json",
         )
         data = json.loads(resp.data.decode())

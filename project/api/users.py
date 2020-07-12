@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from flask_restx import Resource, Api, fields
+from flask_restx import Api, Resource, fields
 
 from project import db
 from project.api.models import User
