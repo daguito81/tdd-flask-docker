@@ -4,34 +4,35 @@ from flask_restx import Resource, Api, fields
 from project import db
 from project.api.models import User
 
-users_blueprint = Blueprint('users', __name__)
+users_blueprint = Blueprint("users", __name__)
 api = Api(users_blueprint)
 
-user_val = api.model('User', {
-    'id': fields.Integer(readOnly=True),
-    'username': fields.String(required=True),
-    'email': fields.String(required=True),
-    'created_date': fields.DateTime,
-})
+user_val = api.model(
+    "User",
+    {
+        "id": fields.Integer(readOnly=True),
+        "username": fields.String(required=True),
+        "email": fields.String(required=True),
+        "created_date": fields.DateTime,
+    },
+)
 
 
 class UsersList(Resource):
     @api.expect(user_val, validate=True)
     def post(self):
         post_data = request.get_json()
-        username = post_data.get('username')
-        email = post_data.get('email')
+        username = post_data.get("username")
+        email = post_data.get("email")
         response_object = {}
 
         user = User.query.filter_by(email=email).first()
         if user:
-            response_object['message'] = 'Sorry. That email already exists.'
+            response_object["message"] = "Sorry. That email already exists."
             return response_object, 400
         db.session.add(User(username=username, email=email))
         db.session.commit()
-        response_object = {
-            'message': f"{email} was added!"
-        }
+        response_object = {"message": f"{email} was added!"}
         return response_object, 201
 
     @api.marshal_with(user_val, as_list=True)
@@ -40,7 +41,6 @@ class UsersList(Resource):
 
 
 class Users(Resource):
-
     @api.marshal_with(user_val)
     def get(self, user_id):
         user = User.query.filter_by(id=user_id).first()
@@ -50,5 +50,5 @@ class Users(Resource):
             return User.query.filter_by(id=user_id).first(), 200
 
 
-api.add_resource(UsersList, '/users')
-api.add_resource(Users, '/users/<int:user_id>')
+api.add_resource(UsersList, "/users")
+api.add_resource(Users, "/users/<int:user_id>")
